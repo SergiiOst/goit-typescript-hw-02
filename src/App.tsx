@@ -38,7 +38,7 @@ export default function App() {
     getImages();
   }, [query, page]);
 
-  const handleSetQuery = (query: string) => {
+  const handleSetQuery = (query) => {
     setQuery(query);
     setImages([]);
     setPage(1);
