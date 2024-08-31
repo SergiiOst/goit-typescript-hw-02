@@ -1,19 +1,18 @@
 import axios from "axios";
 
-export interface Image {
-  id: string;
-  description: string | null;
+type ImageData = {
+  id: number;
   urls: {
     small: string;
-    full: string;
+    regular: string;
   };
-}
+  description: string;
+};
 
-export interface ImageResponse {
-  results: Image[];
-  total: number;
+type ImageResponse = {
+  results: ImageData[];
   total_pages: number;
-}
+};
 
 const fetchImages = async (
   query: string,
@@ -29,7 +28,6 @@ const fetchImages = async (
       },
     }
   );
-
   return response.data;
 };
 

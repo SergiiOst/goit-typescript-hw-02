@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fetchImages, { ImageResponse } from "./services/api";
+import fetchImages from "./services/api";
 import SearchBar from "./components/SearchBar/SearchBar";
 import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
@@ -7,19 +7,24 @@ import ImageGallery from "./components/ImageGallery/ImageGallery";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
 
-interface ImageData {
+type ImageData = {
   id: number;
   urls: {
     small: string;
     regular: string;
   };
   description: string;
-}
+};
 
-interface ModalState {
+type ModalState = {
   isOpen: boolean;
   modalData: string | null;
-}
+};
+
+type ImageResponse = {
+  results: ImageData[];
+  total_pages: number;
+};
 
 export default function App() {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -43,7 +48,9 @@ export default function App() {
 
         const response: ImageResponse = await fetchImages(query, page);
 
-        setImages((prev) => [...prev, ...response.results]);
+        setImages((prev) =>
+          page === 1 ? response.results : [...prev, ...response.results]
+        );
         setTotal(response.total_pages);
       } catch {
         setIsError(true);
