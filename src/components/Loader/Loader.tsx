@@ -1,6 +1,7 @@
 import { Blocks } from "react-loader-spinner";
+import React from "react";
 
-const Loader = () => {
+const Loader: React.FC = () => {
   return (
     <Blocks
       height="80"

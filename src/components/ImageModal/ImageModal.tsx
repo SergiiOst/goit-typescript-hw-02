@@ -4,7 +4,17 @@ import { MdClose } from "react-icons/md";
 
 Modal.setAppElement("#root");
 
-const ImageModal = ({ handleCloseModal, isOpen, modalData }) => {
+type ImageModalProps = {
+  handleCloseModal: () => void;
+  isOpen: boolean;
+  modalData: string | null;
+};
+
+const ImageModal = ({
+  handleCloseModal,
+  isOpen,
+  modalData,
+}: ImageModalProps) => {
   const customStyles = {
     content: {
       top: "50%",
@@ -36,7 +46,7 @@ const ImageModal = ({ handleCloseModal, isOpen, modalData }) => {
       <button className={s.closeModalBtn} onClick={handleCloseModal}>
         <MdClose size={15} />
       </button>
-      <img src={modalData} />
+      {modalData && <img src={modalData} alt="Modal content" />}
     </Modal>
   );
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fetchImages from "./services/api";
+import fetchImages, { ImageResponse } from "./services/api";
 import SearchBar from "./components/SearchBar/SearchBar";
 import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
@@ -7,14 +7,31 @@ import ImageGallery from "./components/ImageGallery/ImageGallery";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
 
+interface ImageData {
+  id: number;
+  urls: {
+    small: string;
+    regular: string;
+  };
+  description: string;
+}
+
+interface ModalState {
+  isOpen: boolean;
+  modalData: string | null;
+}
+
 export default function App() {
-  const [images, setImages] = useState([]);
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [modal, setModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [images, setImages] = useState<ImageData[]>([]);
+  const [query, setQuery] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(0);
+  const [modal, setModal] = useState<ModalState>({
+    isOpen: false,
+    modalData: null,
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
   useEffect(() => {
     if (!query) return;
@@ -24,11 +41,11 @@ export default function App() {
         setIsLoading(true);
         setIsError(false);
 
-        const response = await fetchImages(query, page, 5);
+        const response: ImageResponse = await fetchImages(query, page);
 
         setImages((prev) => [...prev, ...response.results]);
         setTotal(response.total_pages);
-      } catch (error) {
+      } catch {
         setIsError(true);
       } finally {
         setIsLoading(false);
@@ -38,19 +55,19 @@ export default function App() {
     getImages();
   }, [query, page]);
 
-  const handleSetQuery = (query) => {
+  const handleSetQuery = (query: string): void => {
     setQuery(query);
     setImages([]);
     setPage(1);
   };
 
-  function handleOpenModal(image) {
-    setModal({ isOpen: true, modalData: image });
-  }
+  const handleOpenModal = (url: string): void => {
+    setModal({ isOpen: true, modalData: url });
+  };
 
-  function handleCloseModal() {
+  const handleCloseModal = (): void => {
     setModal({ isOpen: false, modalData: null });
-  }
+  };
 
   return (
     <>

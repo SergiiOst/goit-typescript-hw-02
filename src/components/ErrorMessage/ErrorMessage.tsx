@@ -1,6 +1,7 @@
 import s from "./ErrorMessage.module.css";
+import React from "react";
 
-const ErrorMessage = () => {
+const ErrorMessage: React.FC = () => {
   return (
     <p className={s.errorMessage}>Oops! Something went wrong. Try again</p>
   );
